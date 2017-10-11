@@ -15,8 +15,8 @@ public class RetrofitClass {
     private Retrofit retrofit;
     
     public Api api;
-    
-    private String url = "http://10.156.145.113:4875";
+
+    private String url = "http://52.14.74.219:9024";
     
     public static RetrofitClass getInstance() {
         return ourInstance;

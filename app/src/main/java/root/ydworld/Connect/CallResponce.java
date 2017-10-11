@@ -1,6 +1,7 @@
 package root.ydworld.Connect;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import retrofit2.Call;
@@ -15,6 +16,7 @@ public abstract class CallResponce<T> implements Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
+        Log.e("xxx", "suc : " + response.isSuccessful());
         callBack(response.code(), response.body());
     }
 

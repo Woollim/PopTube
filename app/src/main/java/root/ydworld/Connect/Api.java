@@ -16,6 +16,7 @@ public interface Api {
     @Streaming
     Call<ResponseBody> downloadVideo(@Query("url") String url, @Query("type") String type);
 
+
     @GET("title")
     Call<String> getTitle(@Query("url") String url);
 

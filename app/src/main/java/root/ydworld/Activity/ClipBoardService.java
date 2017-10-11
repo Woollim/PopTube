@@ -130,6 +130,7 @@ public class ClipBoardService extends Service {
                 }else{
                     type = "mp3";
                 }
+                contentTypeText.setText(type);
             }
         });
 
@@ -143,9 +144,10 @@ public class ClipBoardService extends Service {
                 RetrofitClass.getInstance().api
                         .downloadVideo(url, type).enqueue(new CallResponce<ResponseBody>(ClipBoardService.this) {
                     @Override
-                    public void callBack(int code, ResponseBody body) {
+                    public void callBack(int code, final ResponseBody body) {
                         if(code == 200){
-                            createFile(body.byteStream());
+                            Log.e("xxx", "size : " + body.contentLength());
+
                         }
                     }
                 });
@@ -156,24 +158,32 @@ public class ClipBoardService extends Service {
     private void createFile(InputStream fileInput){
         try{
             File appFolder = new File(Environment.getExternalStorageDirectory(), "PopTube");
+            Log.d("xxx", "exist" + appFolder.exists());
             if(!appFolder.exists()){ appFolder.mkdir();}
-
-            File saveFile = new File(appFolder, url + "." + type);
+            Log.d("xxx", "exist" + appFolder.exists());
+            File saveFile = new File(appFolder, "helloworld" + "." + type);
             saveFile.setWritable(true);
+
             OutputStream output = new FileOutputStream(saveFile);
 
             byte[] buffer = new byte[1024];
+            long downloadingSize = 0;
             int size;
 
             while ((size = fileInput.read(buffer)) > 0){
+                downloadingSize += size;
                 output.write(buffer, 0, size);
+                Log.e("xxx", "downloading size" + downloadingSize );
             }
+
+            showToast("Download Finish");
 
             fileInput.close();
             output.close();
 
         } catch (Exception e) {
             e.printStackTrace();
+            showToast("Download Error");
         }
     }
 
