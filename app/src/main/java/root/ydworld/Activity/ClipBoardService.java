@@ -4,8 +4,11 @@ import android.app.Service;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,7 +30,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import okhttp3.ResponseBody;
-import root.ydworld.Connect.CallResponce;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import root.ydworld.Connect.RetrofitClass;
 import root.ydworld.R;
 
@@ -108,7 +113,24 @@ public class ClipBoardService extends Service {
 //            }
 //        });
         titleText.setText(url);
-        createDownloadDialog();
+        showDownloadDialog();
+    }
+
+    private void showDownloadDialog(){
+        if(checkOverlay()){
+            createDownloadDialog();
+        }
+    }
+
+    private boolean checkOverlay(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                showToast(getString(R.string.overlay_explane_text), true);
+                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getPackageName(), null)));
+                return false;
+            }
+        }
+        return true;
     }
 
     private void setData(){
@@ -137,31 +159,34 @@ public class ClipBoardService extends Service {
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("Download Start");
+                showToast("Download Start", false);
                 windowManager.removeView(dowmnloadView);
                 dowmnloadView = null;
 
                 RetrofitClass.getInstance().api
-                        .downloadVideo(url, type).enqueue(new CallResponce<ResponseBody>(ClipBoardService.this) {
+                        .downloadVideo(url, type).enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void callBack(int code, final ResponseBody body) {
-                        if(code == 200){
-                            Log.e("xxx", "size : " + body.contentLength());
-
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.code() == 200){
+                            createFile(response.body().byteStream(), "" + System.currentTimeMillis());
                         }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        showToast("Network Error", false);
                     }
                 });
             }
         });
     }
 
-    private void createFile(InputStream fileInput){
+    private void createFile(InputStream fileInput, String fileName){
         try{
             File appFolder = new File(Environment.getExternalStorageDirectory(), "PopTube");
-            Log.d("xxx", "exist" + appFolder.exists());
             if(!appFolder.exists()){ appFolder.mkdir();}
-            Log.d("xxx", "exist" + appFolder.exists());
-            File saveFile = new File(appFolder, "helloworld" + "." + type);
+            File saveFile = new File(appFolder, fileName + "." + type);
             saveFile.setWritable(true);
 
             OutputStream output = new FileOutputStream(saveFile);
@@ -173,22 +198,25 @@ public class ClipBoardService extends Service {
             while ((size = fileInput.read(buffer)) > 0){
                 downloadingSize += size;
                 output.write(buffer, 0, size);
-                Log.e("xxx", "downloading size" + downloadingSize );
             }
 
-            showToast("Download Finish");
+            showToast("Download Finish", false);
 
             fileInput.close();
             output.close();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showToast("Download Error");
+            showToast("Download Error", false);
         }
     }
 
-    private void showToast(String msg){
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    private void showToast(String msg, boolean isLong){
+        int length = Toast.LENGTH_SHORT;
+        if(isLong){
+            length = Toast.LENGTH_LONG;
+        }
+        Toast.makeText(this, msg, length).show();
     }
 
 }

@@ -16,8 +16,8 @@ public abstract class CallResponce<T> implements Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        Log.e("xxx", "suc : " + response.isSuccessful());
-        callBack(response.code(), response.body());
+        Log.e("xxx", response.headers().get("Content-Disposition"));
+
     }
 
     private Context activity;
@@ -26,7 +26,7 @@ public abstract class CallResponce<T> implements Callback<T> {
         this.activity = activity;
     }
 
-    abstract public void callBack(int code, T body);
+    //abstract public void callBack(int code, T body, @Nullable String fileName);
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
