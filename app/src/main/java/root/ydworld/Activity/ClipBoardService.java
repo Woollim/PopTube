@@ -1,8 +1,12 @@
 package root.ydworld.Activity;
 
+import android.app.DownloadManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
@@ -23,17 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import root.ydworld.Connect.RetrofitClass;
 import root.ydworld.R;
 
 /**
@@ -69,7 +65,17 @@ public class ClipBoardService extends Service {
                 }
             }
         });
+
+        IntentFilter downloadCompleteFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        registerReceiver(downloadBroadcastReceiver, downloadCompleteFilter);
     }
+
+    private BroadcastReceiver downloadBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "다운로드 완료", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private View dowmnloadView;
     private WindowManager windowManager;
@@ -147,12 +153,14 @@ public class ClipBoardService extends Service {
         contentTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                String contentTypeStr = "Video";
                 if(b){
                     type = "mp4";
                 }else{
                     type = "mp3";
+                    contentTypeStr = "Music";
                 }
-                contentTypeText.setText(type);
+                contentTypeText.setText(contentTypeStr);
             }
         });
 
@@ -163,52 +171,25 @@ public class ClipBoardService extends Service {
                 windowManager.removeView(dowmnloadView);
                 dowmnloadView = null;
 
-                RetrofitClass.getInstance().api
-                        .downloadVideo(url, type).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.code() == 200){
-                            createFile(response.body().byteStream(), "" + System.currentTimeMillis());
-                        }
-                    }
+                contentDownload("" + System.currentTimeMillis());
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        t.printStackTrace();
-                        showToast("Network Error", false);
-                    }
-                });
+
             }
         });
     }
 
-    private void createFile(InputStream fileInput, String fileName){
-        try{
-            File appFolder = new File(Environment.getExternalStorageDirectory(), "PopTube");
-            if(!appFolder.exists()){ appFolder.mkdir();}
-            File saveFile = new File(appFolder, fileName + "." + type);
-            saveFile.setWritable(true);
-
-            OutputStream output = new FileOutputStream(saveFile);
-
-            byte[] buffer = new byte[1024];
-            long downloadingSize = 0;
-            int size;
-
-            while ((size = fileInput.read(buffer)) > 0){
-                downloadingSize += size;
-                output.write(buffer, 0, size);
-            }
-
-            showToast("Download Finish", false);
-
-            fileInput.close();
-            output.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showToast("Download Error", false);
-        }
+    private void contentDownload(String title){
+        DownloadManager downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
+        String downloadApi = "http://52.14.74.219:9024/search?" + "url=" + url + "&" + "type" + type;
+        Uri downloadUri = Uri.parse(downloadApi);
+        DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+        request.setTitle("PT_" + title + "." + type);
+        request.setDescription("PopTube");
+        File appFolder = new File(Environment.getExternalStorageDirectory(), "PopTube");
+        if(!appFolder.exists()){ appFolder.mkdir();}
+        request.setDestinationInExternalPublicDir("PopTube", "PT_" + title + "." + type);
+        //Log.d("xxx", "contentDownload: " + "PT_" + title + "." + type);
+        long downloadId = downloadManager.enqueue(request);
     }
 
     private void showToast(String msg, boolean isLong){
