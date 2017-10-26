@@ -5,8 +5,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.IBinder
-import android.util.Log
+import android.provider.Settings
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -35,24 +36,38 @@ public class PopService : Service(){
         clipBoard.addPrimaryClipChangedListener {
             val text = clipBoard.primaryClip.getItemAt(0).text.toString()
             if(getString(R.string.youtube_url_id) in text){
-
+                if(checkOverlay()){
+                    loadData(text)
+                }
             }
         }
+    }
+
+    fun checkOverlay(): Boolean{
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(!Settings.canDrawOverlays(this)){
+                return false
+            }
+        }
+
+        return true
     }
 
     fun loadData(text : String){
         var downloadView : View? = findView(R.layout.view_download)
         with(downloadView!!){
-            titleText.text = text
-            contentTypeSwitch.setOnCheckedChangeListener {
+            linkText.text = text
+            var type = ""
+            typeSwitch.setOnCheckedChangeListener {
                 _, checked ->
-                contentTypeText.text = if(checked) "Video" else "Mp3"
+                type = if(checked) "mp4" else "mp3"
+                typeText.text = if(checked) "VIDEO" else "MP3"
             }
 
-            downButton.setOnClickListener {
+            downloadButton.setOnClickListener {
                 windowManager?.removeView(downloadView)
                 downloadView = null
-                Log.d("xxx", "down Start")
+                YTDownManager(this@PopService, text, type)
             }
 
             var timer = Timer()
@@ -60,7 +75,7 @@ public class PopService : Service(){
                 downloadView?.let {
                     windowManager?.removeView(downloadView)
                 }
-            }, 3 * 1000)
+            }, 7 * 1000)
         }
 
         param.gravity = Gravity.BOTTOM
@@ -75,7 +90,7 @@ public class PopService : Service(){
 
     var windowManager : WindowManager? = null
     val param : WindowManager.LayoutParams = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_PHONE,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
