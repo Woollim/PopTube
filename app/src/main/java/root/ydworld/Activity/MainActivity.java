@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }).check();
 
-        Intent intent = new Intent(this, ClipBoardService.class);
+        Intent intent = new Intent(this, PopService.class);
         startService(intent);
     }
 }

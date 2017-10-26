@@ -17,7 +17,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Activity.ClipBoardService"/>
+        <service android:name=".Activity.PopService">
+            <intent-filter android:priority="9999">
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED"/>
+            </intent-filter>
+        </service>
 
     </application>
 

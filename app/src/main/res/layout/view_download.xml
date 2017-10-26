@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:elevation="4dp"
         android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -23,7 +24,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@id/sumImage"
-            android:textSize="22dp"
+            android:textSize="18dp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
+                android:layout_marginLeft="4dp"
                 android:id="@+id/contentTypeText"
                 android:textStyle="bold"
                 android:textSize="14dp"
@@ -65,4 +67,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
