@@ -24,7 +24,8 @@ public class MainActivity extends BaseActivity {
                 .setPermissionListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted() {
-
+                        Intent intent = new Intent(MainActivity.this, PopService.class);
+                        startService(intent);
                     }
 
                     @Override
@@ -32,8 +33,5 @@ public class MainActivity extends BaseActivity {
                         showToast("동영상을 저장하기 위해서 권한이 필요합니다.");
                     }
                 }).check();
-
-        Intent intent = new Intent(this, PopService.class);
-        startService(intent);
     }
 }

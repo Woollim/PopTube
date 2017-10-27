@@ -16,7 +16,7 @@ class YTDownManager(context: Context, keyword: String, type: String) {
                 .Request(Uri.parse(getUrl(keyword, type)))
         request.setTitle("PopTube 영상 다운로드")
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES,
-                "PT_${System.currentTimeMillis()}.${type}")
+                "PT_${System.currentTimeMillis()}.$type")
         downloadManager.enqueue(request)
     }
 

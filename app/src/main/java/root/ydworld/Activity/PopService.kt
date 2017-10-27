@@ -8,10 +8,12 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import kotlinx.android.synthetic.main.view_download.view.*
 import root.ydworld.R
 import java.util.*
@@ -46,6 +48,7 @@ public class PopService : Service(){
     fun checkOverlay(): Boolean{
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(!Settings.canDrawOverlays(this)){
+                Toast.makeText(this, "오버레이 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
                 return false
             }
         }
@@ -54,10 +57,11 @@ public class PopService : Service(){
     }
 
     fun loadData(text : String){
+        Log.d("xxx", text)
         var downloadView : View? = findView(R.layout.view_download)
         with(downloadView!!){
             linkText.text = text
-            var type = ""
+            var type = "mp4"
             typeSwitch.setOnCheckedChangeListener {
                 _, checked ->
                 type = if(checked) "mp4" else "mp3"
