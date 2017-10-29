@@ -46,32 +46,15 @@
             android:textSize="14dp"
             android:text="다운로드"/>
 
-        <LinearLayout
-            android:gravity="center"
-            android:layout_alignParentRight="true"
+        <TextView
             android:layout_margin="8dp"
-            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:textColor="#000000"
-                android:id="@+id/typeText"
-                android:textStyle="bold"
-                android:textSize="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="VIDEO"/>
-
-            <Switch
-                android:theme="@style/switchTheme"
-                android:checked="true"
-                android:layout_marginLeft="8dp"
-                android:id="@+id/typeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="PopTube"/>
 
     </RelativeLayout>
 

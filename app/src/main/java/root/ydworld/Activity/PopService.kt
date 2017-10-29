@@ -37,6 +37,7 @@ public class PopService : Service(){
         val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE)!! as ClipboardManager
         clipBoard.addPrimaryClipChangedListener {
             val text = clipBoard.primaryClip.getItemAt(0).text.toString()
+            Log.d("xxx", text)
             if(getString(R.string.youtube_url_id) in text){
                 if(checkOverlay()){
                     loadData(text)
@@ -57,21 +58,14 @@ public class PopService : Service(){
     }
 
     fun loadData(text : String){
-        Log.d("xxx", text)
         var downloadView : View? = findView(R.layout.view_download)
         with(downloadView!!){
             linkText.text = text
-            var type = "mp4"
-            typeSwitch.setOnCheckedChangeListener {
-                _, checked ->
-                type = if(checked) "mp4" else "mp3"
-                typeText.text = if(checked) "VIDEO" else "MP3"
-            }
 
             downloadButton.setOnClickListener {
                 windowManager?.removeView(downloadView)
                 downloadView = null
-                YTDownManager(this@PopService, text, type)
+                YTDownManager(this@PopService, text)
             }
 
             var timer = Timer()
@@ -79,7 +73,7 @@ public class PopService : Service(){
                 downloadView?.let {
                     windowManager?.removeView(downloadView)
                 }
-            }, 7 * 1000)
+            }, 5 * 1000)
         }
 
         param.gravity = Gravity.BOTTOM

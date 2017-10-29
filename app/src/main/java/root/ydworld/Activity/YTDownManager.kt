@@ -1,27 +1,29 @@
 package root.ydworld.Activity
 
-import android.app.DownloadManager
 import android.content.Context
-import android.net.Uri
-import android.os.Environment
+import android.content.Intent
+import root.ydworld.R
 
 /**
  * Created by root1 on 2017. 10. 26..
  */
-class YTDownManager(context: Context, keyword: String, type: String) {
+class YTDownManager(context: Context, keyword: String) {
+
+    var youtube_url_id = ""
+    var down_youtube_link = ""
 
     init {
-        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE)!! as DownloadManager
-        val request = android.app.DownloadManager
-                .Request(Uri.parse(getUrl(keyword, type)))
-        request.setTitle("PopTube 영상 다운로드")
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES,
-                "PT_${System.currentTimeMillis()}.$type")
-        downloadManager.enqueue(request)
+        youtube_url_id = context.getString(R.string.youtube_url_id)
+        down_youtube_link = context.getString(R.string.youtube_base_url)
+
+        val intent = Intent(context, DownActivity::class.java)
+        intent.putExtra("url", getUrl(keyword))
+        context.startActivity(intent)
     }
 
-    private fun getUrl(keyword: String, type: String): String{
-        return "http://52.14.74.219:9024/search?url=$keyword&type=$type"
+    private fun getUrl(link: String): String{
+        val keyword = link.split(youtube_url_id)
+        return down_youtube_link + keyword[1]
     }
 
 
