@@ -21,7 +21,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/icon_bug"
-        android:background="@android:color/transparent"/>
+        android:background="@drawable/back_button"/>
 
     <TextView
         android:gravity="center"

@@ -65,6 +65,7 @@ public class PopService : Service(){
             downloadButton.setOnClickListener {
                 windowManager?.removeView(downloadView)
                 downloadView = null
+
                 YTDownManager(this@PopService, text)
             }
 
@@ -93,5 +94,6 @@ public class PopService : Service(){
             WindowManager.LayoutParams.TYPE_PHONE,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT)
+
 
 }
