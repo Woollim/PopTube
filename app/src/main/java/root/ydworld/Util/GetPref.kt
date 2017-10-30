@@ -15,6 +15,14 @@ public class GetPref(context: Context){
         pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
     }
 
+    public fun setCookie(cookie: String){
+        val editor = pref?.edit()
+        editor?.putString("cookie", cookie)
+        editor?.commit()
+    }
 
+    public fun getCookie(): String{
+        return pref!!.getString("cookie", "")
+    }
 
 }

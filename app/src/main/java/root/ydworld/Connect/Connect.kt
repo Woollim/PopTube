@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object Connect {
 
     var api : Api? = null
-    val url = ""
+    val url = "http://52.14.74.219:9024"
 
     init {
         val logger = HttpLoggingInterceptor()

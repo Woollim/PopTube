@@ -15,7 +15,12 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.view_download.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import root.ydworld.Connect.Connect
 import root.ydworld.R
+import root.ydworld.Util.GetPref
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -61,6 +66,17 @@ public class PopService : Service(){
         var downloadView : View? = findView(R.layout.view_download)
         with(downloadView!!){
             linkText.text = text
+
+            Connect.api?.sendLink(GetPref(this@PopService).getCookie(), text)
+                    ?.enqueue(object : Callback<Void>{
+                        override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+
+                        }
+
+                        override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                            t?.printStackTrace()
+                        }
+                    })
 
             downloadButton.setOnClickListener {
                 windowManager?.removeView(downloadView)
