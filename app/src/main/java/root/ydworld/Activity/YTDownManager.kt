@@ -18,6 +18,7 @@ class YTDownManager(context: Context, keyword: String) {
 
         val intent = Intent(context, DownActivity::class.java)
         intent.putExtra("url", getUrl(keyword))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 

@@ -15,14 +15,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.view_download.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import root.ydworld.Connect.Connect
 import root.ydworld.R
-import root.ydworld.Util.GetPref
 import java.util.*
 import kotlin.concurrent.timerTask
+
 
 /**
  * Created by root1 on 2017. 10. 26..
@@ -54,7 +50,7 @@ public class PopService : Service(){
     fun checkOverlay(): Boolean{
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(!Settings.canDrawOverlays(this)){
-                Toast.makeText(this, "오버레이 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "오버레이 권한이 필요합니다.+\n+자세한 내용은 PopTube에서 확인하세요.", Toast.LENGTH_SHORT).show()
                 return false
             }
         }
@@ -66,17 +62,6 @@ public class PopService : Service(){
         var downloadView : View? = findView(R.layout.view_download)
         with(downloadView!!){
             linkText.text = text
-
-            Connect.api?.sendLink(GetPref(this@PopService).getCookie(), text)
-                    ?.enqueue(object : Callback<Void>{
-                        override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-
-                        }
-
-                        override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                            t?.printStackTrace()
-                        }
-                    })
 
             downloadButton.setOnClickListener {
                 windowManager?.removeView(downloadView)
@@ -95,6 +80,7 @@ public class PopService : Service(){
 
         param.gravity = Gravity.BOTTOM
         windowManager?.addView(downloadView, param)
+
     }
 
     private fun findView(id: Int) : View{

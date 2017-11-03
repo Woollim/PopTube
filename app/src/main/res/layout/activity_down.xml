@@ -5,21 +5,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:adSize="BANNER"
+        app:adUnitId="@string/add_id"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_marginTop="32dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:adSize="BANNER"
-        app:adUnitId="@string/add_id"/>
 
     <WebView
         android:layout_centerHorizontal="true"
@@ -36,7 +36,7 @@
 
     <TextView
         android:layout_marginBottom="128dp"
-        android:layout_above="@id/adView"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
         android:layout_width="wrap_content"

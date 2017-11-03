@@ -1,10 +1,8 @@
 package root.ydworld.Activity
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -22,11 +20,8 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         if(getCookie().isEmpty()){
-            val builder = AlertDialog.Builder(this).setTitle("알립니다").setMessage(getString(R.string.info_seton))
-                    .setPositiveButton("확인", DialogInterface.OnClickListener({
-                        dialog, _ ->
-                        dialog.cancel()
-                    }))
+
+            createDialog("환영합니다.", R.string.info_seton)
 
             Connect.api?.id?.enqueue(object : Callback<JsonObject>{
                 override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
@@ -35,14 +30,12 @@ class MainActivity : BaseActivity() {
 
                 override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
                     val id = response?.body()?.get("id")?.asString
-                    Log.d("xxx", id)
                     id?.let {
                         GetPref(this@MainActivity).setCookie(id!!)
                     }
                 }
             })
 
-            builder.create().show()
         }
 
         val intent = Intent(this@MainActivity, PopService::class.java)
@@ -51,5 +44,16 @@ class MainActivity : BaseActivity() {
         button_bug.setOnClickListener {
             startActivity(Intent(this, BugActivity::class.java))
         }
+
+        helpButton.setOnClickListener {
+            createDialog("확인하세요.", R.string.info_permission)
+        }
+    }
+
+    private fun createDialog(title: String, message: Int){
+        val builder = AlertDialog.Builder(this)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton("확인"){dialog, _ -> dialog.cancel()}
+        builder.create().show()
     }
 }

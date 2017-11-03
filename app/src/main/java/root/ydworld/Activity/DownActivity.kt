@@ -1,12 +1,14 @@
 package root.ydworld.Activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_down.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import root.ydworld.Connect.Connect
 import root.ydworld.R
 import root.ydworld.Util.BaseActivity
 
@@ -20,19 +22,21 @@ class DownActivity: BaseActivity() {
         setContentView(R.layout.activity_down)
         val url = intent.getStringExtra("url")
 
-
-
         webView.loadUrl(url)
 
         MobileAds.initialize(this, getString(R.string.add_id))
-        adView.loadAd(AdRequest.Builder().
-                addTestDevice("7A34834041D0C1ABB8133B1CEFD3349D").build())
+        adView.loadAd(AdRequest.Builder().build())
 
-        adView.adListener = object : AdListener(){
-            override fun onAdFailedToLoad(p0: Int) {
-                Log.d("xxx", ""+p0)
-            }
-        }
+        Connect.api?.sendLink(getCookie(), url)
+                ?.enqueue(object : Callback<Void>{
+                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+
+                    }
+
+                    override fun onFailure(call: Call<Void>?, t: Throwable?) {
+
+                    }
+                })
 
     }
 
