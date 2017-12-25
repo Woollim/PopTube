@@ -1,23 +1,17 @@
 package root.ydworld.Activity
 
-import android.app.Service
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.graphics.PixelFormat
-import android.os.Build
-import android.os.IBinder
-import android.provider.Settings
-import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
-import android.widget.Toast
+import android.app.*
+import android.content.*
+import android.graphics.*
+import android.os.*
+import android.provider.*
+import android.util.*
+import android.view.*
+import android.widget.*
 import kotlinx.android.synthetic.main.view_download.view.*
-import root.ydworld.R
+import root.ydworld.*
 import java.util.*
-import kotlin.concurrent.timerTask
+import kotlin.concurrent.*
 
 
 /**
@@ -54,7 +48,6 @@ public class PopService : Service(){
                 return false
             }
         }
-
         return true
     }
 
@@ -96,6 +89,5 @@ public class PopService : Service(){
             WindowManager.LayoutParams.TYPE_PHONE,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT)
-
 
 }

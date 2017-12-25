@@ -2,13 +2,8 @@
     <string name="app_name">PopTube</string>
     <string name="youtube_url_id">https://youtu.be/</string>
     <string name="youtube_base_url">http://ssyoutube.com/watch?v=</string>
-    <string name="overlay_explane_text">다운로드 팝업을 띄우기 위해서\n다른 어플 위에 표시되는 앱\n권한이 필요합니다.</string>
-
-
-
-    <string name="info_permission">"PopTube에 \"다른 앱 위로 올라가는 앱\"이라는\n권한을 주어야 합니다."</string>
-    <string name="info_seton">PopTube가 동작하지 않을 때에는\n어플을 다시 실행해 주세요.</string>
-    <string name="info_warning">다운 받은 모든 동영상은 저작권이 있습니다.\n개인 소장용으로만 사용해주세요.</string>
+    
+    <string name="ma"
 
     <string name="add_id">ca-app-pub-9256821887818466/9548141713</string>
 

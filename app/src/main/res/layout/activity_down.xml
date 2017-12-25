@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:background="@drawable/back_down"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
+        android:id="@+id/ad_load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:adSize="BANNER"
@@ -14,34 +13,17 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
 
+    <ImageView
+        android:layout_centerInParent="true"
+        android:layout_width="256dp"
+        android:src="@drawable/load_info_icon"
+        android:layout_height="256dp" />
+
     <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_marginTop="32dp"
+        android:id="@+id/progress_load"
+        android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <WebView
-        android:layout_centerHorizontal="true"
-        android:id="@+id/webView"
-        android:layout_width="16dp"
-        android:layout_height="16dp"/>
-
-    <ImageView
-        android:layout_marginTop="200dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/icon_logo"
-        android:layout_width="82dp"
-        android:layout_height="82dp" />
-
-    <TextView
-        android:layout_marginBottom="128dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:textSize="18dp"
-        android:layout_height="wrap_content"
-        android:text="PopTube를 이용해주셔서 감사합니다."/>
 
 </RelativeLayout>
